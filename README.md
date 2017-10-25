@@ -1,5 +1,12 @@
 # web app
 
+## purpose
+
+Web app that will scrap web every day and store data in database.
+
+[MPK_Crawler](https://github.com/MIachaI/MPK_Crawler) app will use app service
+not to download all information by itself every time (as it takes a *little bit* of time)
+
 ## setup
 
 This section describes setting up your working directory.
@@ -63,12 +70,19 @@ $ python manage.py runserver
 After this go to [localhost:8000](http://127.0.0.1:8000) in your browser
 You can change default port number with `-p` flag
 
-## purpose
+## running tests
 
-Web app that will scrap web every day and store data in database.
+To run tests run command
 
-[MPK_Crawler](https://github.com/MIachaI/MPK_Crawler) app will use app service
-not to download all information by itself every time (it takes a **lot** of time)
+```
+$ python manage.py test
+```
+
+To run tests only for specific app, e.g. only for `collector` run
+```
+$ python manage.py test collector
+```
+
 
 ## desired output
 
