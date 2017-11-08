@@ -28,8 +28,8 @@ class ParserTests(TestCase):
             html = file.read()
 
         self.assertListEqual(mpk_krakow.get_all_stops(html)[:4], [  # checks only 4 first elements
-            'Agatowa', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWdhdG93YQeEeeEe',
-            'Agencja Kraków Wschód', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWdlbmNqYSBLcmFrw7N3IFdzY2jDs2QeEe',
-            'AGH / UR', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QUdIIC8gVVIeEe',
-            'Akacjowa', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWthY2pvd2EeEe'
+            ('Agatowa', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWdhdG93YQeEeeEe'),
+            ('Agencja Kraków Wschód', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWdlbmNqYSBLcmFrw7N3IFdzY2jDs2QeEe'),
+            ('AGH / UR', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QUdIIC8gVVIeEe'),
+            ('Akacjowa', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWthY2pvd2EeEe')
         ])
