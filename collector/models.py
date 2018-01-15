@@ -7,6 +7,12 @@ class City(models.Model):
     name = models.CharField(max_length=30)
     last_update = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return '{}({}, id: {})'.format(self.__class__.__name__, self.name, self.id)
+
+    def __repr__(self):
+        return '<{}: ({}, id: {})>'.format(self.__class__.__name__, self.name, self.id)
+
 
 class BusStop(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
