@@ -23,13 +23,14 @@ def city_timetables(request):
     city object fields: name, lastUpdate, stops.
     `stops` field is a list with bus stops and all lines leaving from this stop.
     """
-    response = []
+    response = {}
+    cities_j = []
     cities = request.GET.getlist('city')
     for city_str in cities:
         try:
             city = City.objects.get(name__iexact=city_str)
         except City.DoesNotExist:
-            response.append({
+            cities_j.append({
                 'name': city_str,
                 'cityNotFound': True,
             })
@@ -37,13 +38,13 @@ def city_timetables(request):
             city_stops = []
             for stop in city.busstop_set.all():
                 city_stops.append({stop.name: [{line.line_number: line.link} for line in stop.timetable_set.all()]})
-            response.append({
+            cities_j.append({
                 'name': city.name,
                 'lastUpdate': city.last_update,
                 'stops': city_stops
             })
-
-    return JsonResponse(response, safe=False)
+    response['cities'] = cities_j
+    return JsonResponse(response)
 
 
 def all_info(request):
