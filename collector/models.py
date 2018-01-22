@@ -21,6 +21,9 @@ class BusStop(models.Model):
     class Meta:
         unique_together = ('city', 'name')
 
+    def __str__(self):
+        return 'BusStop({}, {})'.format(self.name, self.city.name)
+
 
 class Timetable(models.Model):
     link = models.CharField(max_length=200, null=True)
