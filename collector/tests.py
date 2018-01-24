@@ -2,7 +2,7 @@ import os
 from django.test import TestCase
 
 from crawler.settings import BASE_DIR
-from collector.parsers import mpk_krakow
+from collector.parsers import mpk_krakow, mpk_wroclaw
 
 # Create your tests here.
 
@@ -33,3 +33,15 @@ class ParserTests(TestCase):
             ('AGH / UR', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QUdIIC8gVVIeEe'),
             ('Akacjowa', 'http://rozklady.mpk.krakow.pl/?lang=PL&akcja=przystanek&rozklad=20171023&przystanek=QWthY2pvd2EeEe')
         ])
+
+
+class WroclawParserTest(TestCase):
+    def test_parse_bus_stop_list(self):
+        stops_list = mpk_wroclaw.parse_bus_stop_list('https://www.wroclaw.pl/wszystkie-przystanki')
+        self.assertTrue(('Brodzka', 'https://www.wroclaw.pl/linie-na-przystanku-brodzka-wroclaw') in stops_list)
+        self.assertTrue(('Górnicza', 'https://www.wroclaw.pl/linie-na-przystanku-gornicza-wroclaw') in stops_list)
+        self.assertTrue(('Serbska', 'https://www.wroclaw.pl/linie-na-przystanku-serbska-wroclaw')in stops_list)
+        self.assertTrue(('Strzegomska 56', 'https://www.wroclaw.pl/linie-na-przystanku-strzegomska-56-wroclaw') in stops_list)
+        self.assertTrue(('TRZMIELOWICKA (Stacja kolejowa)', 'https://www.wroclaw.pl/linie-na-przystanku-trzmielowicka-stacja-kolejowa-wroclaw') in stops_list)
+        self.assertTrue(('Zębice - Trzech Lip/Prusa', 'https://www.wroclaw.pl/linie-na-przystanku-zebice-trzech-lip-prusa-wroclaw') in stops_list)
+
