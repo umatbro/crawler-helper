@@ -31,7 +31,7 @@ def parse_bus_stop(link_to_bus_stop: str) -> list:
 
     :param link_to_bus_stop: link directing to page with timetables listed (example:
     http://www.ztm.waw.pl/rozklad_nowy.php?c=183&l=1&a=3748)
-    :return:
+    :return: 2 element tuple (line number, link to timetable)
     """
     content = requests.get(link_to_bus_stop).content.decode('utf-8')
     soup = BeautifulSoup(content, 'html.parser')

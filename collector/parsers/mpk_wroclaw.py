@@ -1,10 +1,9 @@
-from collections import defaultdict
-
 import requests
 from bs4 import BeautifulSoup
 
-from django.utils import timezone
 from collector.models import City, BusStop, Timetable
+from collector.parsers import city as city_upd
+
 
 MPK_HOMEPAGE = 'https://www.wroclaw.pl/'
 
@@ -27,9 +26,13 @@ def parse_bus_stop(link_to_bus_stop: str) -> list:
     Parse bus stop page to return list of tuples (line number, link to timetable).
 
     :param link_to_bus_stop: link directing to page with timetables listed
-    :return:
+    :return: 2 element tuple (line number, link to timetable)
     """
-    pass
+    soup = BeautifulSoup(requests.get(link_to_bus_stop).content.decode('utf-8'), 'html.parser')
+    rows = soup.select('table.table.table-bordered.table-schedule tbody tr')
+    bus_line_buttons = filter(lambda item: item is not None, [row.select_one('td a.btn') for row in rows])
+
+    return [(button.text, MPK_HOMEPAGE[:-1] + button.attrs['href']) for button in bus_line_buttons]
 
 
 def update_city():
@@ -41,4 +44,6 @@ def update_city():
     * save timetables
     :return:
     """
-    pass
+    city, just_created = City.objects.get_or_create(name='Wrocław')
+    stops_list = parse_bus_stop_list('https://www.wroclaw.pl/wszystkie-przystanki')
+    city_upd.update_city(city, stops_list, parse_bus_stop)
