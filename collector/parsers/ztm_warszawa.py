@@ -16,7 +16,7 @@ def parse_bus_stop_list(link: str) -> list:
     :param link: link to page with bus stops listed
     :return: list with 2-element tuples (bus stop name, link to bus stop)
     """
-    soup = BeautifulSoup(requests.get(link).text, 'html.parser')
+    soup = BeautifulSoup(requests.get(link).content.decode('utf-8'), 'html.parser')
     przystanek_lists = soup.select('div.PrzystanekList')
     links = []
     for item in przystanek_lists:
@@ -33,7 +33,7 @@ def parse_bus_stop(link_to_bus_stop: str) -> list:
     http://www.ztm.waw.pl/rozklad_nowy.php?c=183&l=1&a=3748)
     :return:
     """
-    content = requests.get(link_to_bus_stop).text
+    content = requests.get(link_to_bus_stop).content.decode('utf-8')
     soup = BeautifulSoup(content, 'html.parser')
 
     _ = soup.select('div.PrzystanekKierunek div.PrzystanekLineList')

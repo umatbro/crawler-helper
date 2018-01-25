@@ -83,7 +83,7 @@ def collect_bulks() -> list:
 
     # parse html contents
     main_page = requests.get(MPK_HOMEPAGE)
-    mp_soup = BeautifulSoup(main_page.text, 'html.parser')
+    mp_soup = BeautifulSoup(main_page.content.decode('utf-8'), 'html.parser')
     label = mp_soup.find('label', {'class': 'label_submit', 'title': ' Przystanki '})
     link = label.select('a')[0].get('href')
 
@@ -117,7 +117,7 @@ def mpk_content(url, cookies=None):
     if cookies is None:
         cookies = r_first.cookies
     r = requests.get(url, cookies=cookies)
-    return r.text
+    return r.content.decode('utf-8')
 
 
 if __name__ == '__main__':
