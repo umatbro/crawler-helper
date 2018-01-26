@@ -1,10 +1,8 @@
-from collections import defaultdict
-
 import requests
 from bs4 import BeautifulSoup
 
-from django.utils import timezone
-from collector.models import City, BusStop, Timetable
+from collector.models import City
+from collector.parsers.city import update_city as upd_city
 
 ZTM_HOMEPAGE = 'http://www.ztm.waw.pl/'
 
@@ -55,37 +53,10 @@ def update_city():
     :return:
     """
     city, just_created = City.objects.get_or_create(name='Warszawa')
-    old_stops = city.busstop_set.all()
 
     # get info
     bus_stops_list_link = BeautifulSoup(requests.get(ZTM_HOMEPAGE).text, 'html.parser')\
         .select_one('a[title="szukaj z przystanku"]').attrs['href']
-    # stops_list = list(map(lambda x: (re.sub(r'\s\(.+\)', '', x[0]), x[1]), parse_bus_stop_list(bus_stops_list_link)))
     stops_list = parse_bus_stop_list(bus_stops_list_link)
-    bulk = [BusStop(name=stop_name, city=city) for stop_name, stop_link in stops_list]
-
-    # deal with duplicate names (concat number to name like this name(1))
-    names = defaultdict(lambda: 0)
-    for item in bulk:
-        names[item.name] += 1
-        if names[item.name] > 1:
-            item.name += '({})'.format(names[item.name] - 1)
-    # delete old stops
-    old_stops.delete()
-    # save new stops
-    BusStop.objects.bulk_create(bulk)
-
-    bulk = []
-    for stop_name, stop_link in stops_list:
-        print('Gathering \'{}\''.format(stop_name))
-        [bulk.append(Timetable(
-            link=link,
-            line_number=line_num,
-            bus_stop=BusStop.objects.get(name=stop_name),
-            last_update=timezone.now(),
-        )) for line_num, link in parse_bus_stop(stop_link)]
-
-    Timetable.objects.bulk_create(bulk)
-    city.last_update = timezone.now()
-    city.save()
+    upd_city(city, stops_list, parse_bus_stop)
 

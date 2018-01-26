@@ -1,10 +1,6 @@
-from django.shortcuts import render
-from collector.parsers import mpk_krakow
 from django.http import JsonResponse
 from collector.models import City, BusStop, Timetable
 
-
-# Create your views here.
 
 def update_city_view(request, city_name):
     pass

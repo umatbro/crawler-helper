@@ -1,10 +1,11 @@
 import os
+import traceback
+from copy import deepcopy
 from django.test import TestCase
 
+from collector.models import City, Timetable
 from crawler.settings import BASE_DIR
-from collector.parsers import mpk_krakow, mpk_wroclaw
-
-# Create your tests here.
+from collector.parsers import mpk_krakow, mpk_wroclaw, ztm_warszawa
 
 
 class ParserTests(TestCase):
@@ -45,3 +46,64 @@ class WroclawParserTest(TestCase):
         self.assertTrue(('TRZMIELOWICKA (Stacja kolejowa)', 'https://www.wroclaw.pl/linie-na-przystanku-trzmielowicka-stacja-kolejowa-wroclaw') in stops_list)
         self.assertTrue(('Zębice - Trzech Lip/Prusa', 'https://www.wroclaw.pl/linie-na-przystanku-zebice-trzech-lip-prusa-wroclaw') in stops_list)
 
+
+class UpdateTester(TestCase):
+    def test_krakow_update_twice(self):
+        try:
+            mpk_krakow.update_city()
+            city = City.objects.get(name='Kraków')
+            krak_busstops_before = city.busstop_set.count()
+            krak_timetables_before = Timetable.objects.filter(bus_stop__city=city).count()
+            krakow_prev_date = deepcopy(city.last_update)
+            mpk_krakow.update_city()
+
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(e)
+        else:
+            city.refresh_from_db()
+            self.assertNotEqual(0, city.busstop_set.count())
+            self.assertNotEqual(0, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertEqual(krak_busstops_before, city.busstop_set.count())
+            self.assertEqual(krak_timetables_before, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertGreater(city.last_update, krakow_prev_date)
+
+    def test_wwa_update_twice(self):
+        try:
+            ztm_warszawa.update_city()
+            city = City.objects.get(name='Warszawa')
+            wwa_busstops_before = city.busstop_set.count()
+            wwa_timetables_before = Timetable.objects.filter(bus_stop__city=city).count()
+            wwa_prev_date = deepcopy(city.last_update)
+            ztm_warszawa.update_city()
+
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(e)
+        else:
+            city.refresh_from_db()
+            self.assertNotEqual(0, city.busstop_set.count())
+            self.assertNotEqual(0, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertEqual(wwa_busstops_before, city.busstop_set.count())
+            self.assertEqual(wwa_timetables_before, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertGreater(city.last_update, wwa_prev_date)
+
+    def test_wroc_update_twice(self):
+        try:
+            mpk_wroclaw.update_city()
+            city = City.objects.get(name='Wrocław')
+            wroc_busstops_before = city.busstop_set.count()
+            wroc_timetables_before = Timetable.objects.filter(bus_stop__city=city).count()
+            wroc_prev_date = deepcopy(city.last_update)
+            mpk_wroclaw.update_city()
+
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(e)
+        else:
+            city.refresh_from_db()
+            self.assertNotEqual(0, city.busstop_set.count())
+            self.assertNotEqual(0, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertEqual(wroc_busstops_before, city.busstop_set.count())
+            self.assertEqual(wroc_timetables_before, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertGreater(city.last_update, wroc_prev_date)

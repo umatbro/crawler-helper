@@ -47,5 +47,5 @@ def update_city(city: City, stops_list: List[Tuple[str, str]], parse_bus_stop_fu
             bus_stop_model.timetable_set.all().delete()
 
         Timetable.objects.bulk_create(bulk)
-        city.last_update = timezone.now()
-        city.save()
+    city.last_update = timezone.now()
+    city.save()
