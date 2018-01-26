@@ -3,18 +3,19 @@ from bs4 import BeautifulSoup
 
 from django.utils import timezone
 from collector.models import City, BusStop, Timetable
+from collector.parsers.city import update_city as upd_city
 
 MPK_HOMEPAGE = 'http://rozklady.mpk.krakow.pl/'
 
 
-def parse_bus_stop(html: str) -> list:
+def parse_bus_stop(link: str) -> list:
     """
     Parse single bus stop and get all lines that have departures from there with link to the timetable.
 
-    :param html: HTML from bus stop webpage with listed lines
+    :param link: link to webpage with listed lines
     :return: list with 2-element tuples (line number, link to timetable)
     """
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(mpk_content(link), 'html.parser')
     items_list = soup.select('html body table.main tbody tr td table tbody tr')
     result = []
     for item in items_list:
@@ -25,14 +26,14 @@ def parse_bus_stop(html: str) -> list:
     return result
 
 
-def get_all_stops(html: str) -> list:
+def get_all_stops(link: str) -> list:
     """
     From main page where all bus stops are listed get all links assigned to bus stop names
 
-    :param html: html code from main page, where all stops are listed, http://rozklady.mpk.krakow.pl/?lang=PL&rozklad=20171023&akcja=przystanek
+    :param link: link to main page, where all stops are listed, http://rozklady.mpk.krakow.pl/?lang=PL&rozklad=20171023&akcja=przystanek
     :return: list with 2-element tuples (bus stop name, link to bus stop)
     """
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(mpk_content(link), 'html.parser')
     items_list = soup.select('html body table.main tbody tr td form#main table tbody tr td a')
     result = []
     for item in items_list:
@@ -120,7 +121,10 @@ def mpk_content(url, cookies=None):
     return r.content.decode('utf-8')
 
 
-if __name__ == '__main__':
-    x = collect_all_info()
-
-    print(x)
+def update_city():
+    city, just_created = City.objects.get_or_create(name='Kraków')
+    cont = mpk_content('http://rozklady.mpk.krakow.pl/')
+    bus_stops_link = BeautifulSoup(cont, 'html.parser').find('label', {'title': ' Przystanki '})\
+        .select_one('a').attrs['href']
+    stops_list = get_all_stops(bus_stops_link)
+    upd_city(city, stops_list, parse_bus_stop)
