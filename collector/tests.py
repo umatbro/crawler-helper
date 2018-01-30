@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from collector.models import City, Timetable
 from crawler.settings import BASE_DIR
-from collector.parsers import mpk_krakow, mpk_wroclaw, ztm_warszawa
+from collector.parsers import mpk_krakow, mpk_wroclaw, ztm_warszawa, mpk_poznan
 
 
 class ParserTests(TestCase):
@@ -107,3 +107,33 @@ class UpdateTester(TestCase):
             self.assertEqual(wroc_busstops_before, city.busstop_set.count())
             self.assertEqual(wroc_timetables_before, Timetable.objects.filter(bus_stop__city=city).count())
             self.assertGreater(city.last_update, wroc_prev_date)
+
+    def test_poznan_update_twice(self):
+        try:
+            mpk_poznan.update_city()
+            city = City.objects.get(name='Poznań')
+            poznan_busstops_before = city.busstop_set.count()
+            poznan_timetables_before = Timetable.objects.filter(bus_stop__city=city).count()
+            poznan_prev_date = deepcopy(city.last_update)
+            mpk_poznan.update_city()
+
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(e)
+        else:
+            city.refresh_from_db()
+            self.assertNotEqual(0, city.busstop_set.count())
+            self.assertNotEqual(0, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertEqual(poznan_busstops_before, city.busstop_set.count())
+            self.assertEqual(poznan_timetables_before, Timetable.objects.filter(bus_stop__city=city).count())
+            self.assertGreater(city.last_update, poznan_prev_date)
+
+        alphabet = deepcopy(mpk_poznan.LETTERS)
+        for stop in city.busstop_set.all():
+            try:
+                alphabet.remove(stop.name[0])
+            except ValueError:
+                continue
+
+        if alphabet:
+            self.fail('Not all alphabet letters captured.\nMissing letters: {}'.format(alphabet))
