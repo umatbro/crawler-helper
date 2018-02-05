@@ -1,6 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
+import traceback
 
-from collector.models import City
+from django.core.management.base import BaseCommand
+
 from collector.parsers import mpk_krakow, mpk_wroclaw, mpk_poznan, ztm_warszawa
 
 
@@ -13,7 +14,7 @@ MODULES = {
 
 
 class Command(BaseCommand):
-    help = 'Update application data. This command parses webpages'
+    help = 'Update application data. This command parses websites and stores results in project\'s database'
 
     def add_arguments(self, parser):
         parser.add_argument('city_name', nargs='*', type=str)
@@ -23,7 +24,6 @@ class Command(BaseCommand):
             if options.get('city_name', False) else \
             [city_name for city_name in MODULES.keys()]  # if no city names were provided, acquire them from database
 
-        print(city_names)
         for city_name in city_names:  # type: str
             try:
                 module = MODULES[city_name.lower()]
@@ -35,6 +35,7 @@ class Command(BaseCommand):
                 try:
                     module.update_city()
                 except Exception:
+                    traceback.print_exc()
                     self.stdout.write(self.style.ERROR('Error updating {}'.format(city_name.title())))
                 else:
                     self.stdout.write(self.style.SUCCESS(
