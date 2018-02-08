@@ -1,6 +1,7 @@
 import os
 import traceback
 import logging
+from importlib import reload
 
 from django.core.management.base import BaseCommand
 
@@ -15,6 +16,7 @@ MODULES = {
     'warszawa': ztm_warszawa
 }
 
+reload(logging)
 logging.basicConfig(
     format='%(asctime)s %(levelname)s: %(message)s',
     # datefmt='%m/%d/%Y %I:%M:%S %p',
