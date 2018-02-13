@@ -1,7 +1,6 @@
 import os
 import traceback
 import logging
-from importlib import reload
 
 from django.core.management.base import BaseCommand
 
@@ -16,13 +15,14 @@ MODULES = {
     'warszawa': ztm_warszawa
 }
 
-reload(logging)
-logging.basicConfig(
-    format='%(asctime)s %(levelname)s: %(message)s',
-    # datefmt='%m/%d/%Y %I:%M:%S %p',
-    filename=os.path.join(BASE_DIR, 'update.log'),
-    level=logging.INFO,
-)
+LOG_FORMAT = '[%(asctime)s] %(levelname)-8s: %(message)s'
+
+logger = logging.getLogger(__name__)
+handler = logging.FileHandler(os.path.join(BASE_DIR, 'update.log'), encoding='utf-8')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter(LOG_FORMAT)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class Command(BaseCommand):
@@ -40,7 +40,7 @@ class Command(BaseCommand):
             [city_name for city_name in MODULES.keys()]  # if no city names were provided, acquire them from database
 
         if options['log']:
-            logging.info('Started update for cities: {}'.format(city_names))
+            logger.info('Started update for cities: {}'.format(city_names))
 
         try:
             # update each city
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 except KeyError:  # city not implemented
                     err_msg = 'City {} cannot be updated, it is not implemented'.format(city_name)
                     if options['log']:
-                        logging.error(err_msg)
+                        logger.error(err_msg)
                     self.stdout.write(self.style.WARNING(
                         err_msg
                     ))
@@ -60,16 +60,16 @@ class Command(BaseCommand):
                     except Exception:  # any unexpected error
                         err_msg = 'Error updating {}'.format(city_name.title())
                         if options['log']:
-                            logging.exception(err_msg)
+                            logger.exception(err_msg)
                         traceback.print_exc()
                         self.stdout.write(self.style.ERROR(err_msg))
                     else:
                         msg = 'Successfully updated {}'.format(city_name.title())
                         if options['log']:
-                            logging.info(msg)
+                            logger.info(msg)
                         self.stdout.write(self.style.SUCCESS(
                             msg
                         ))
         except KeyboardInterrupt:
             if options['log']:
-                logging.warning('Update {} stopped by user (KeyboardInterrupt)'.format(city_name.title()))
+                logger.warning('Update {} stopped by user (KeyboardInterrupt)'.format(city_name.title()))
