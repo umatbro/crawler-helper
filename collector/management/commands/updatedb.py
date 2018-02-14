@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import traceback
 import logging
@@ -15,11 +17,11 @@ MODULES = {
     'warszawa': ztm_warszawa
 }
 
-LOG_FORMAT = '[%(asctime)s] %(levelname)-8s: %(message)s'
+LOG_FORMAT = '[%(asctime)s] %(levelname)s: %(message)s'
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 handler = logging.FileHandler(os.path.join(BASE_DIR, 'update.log'), encoding='utf-8')
-handler.setLevel(logging.INFO)
 formatter = logging.Formatter(LOG_FORMAT)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
