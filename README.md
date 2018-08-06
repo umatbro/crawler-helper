@@ -1,5 +1,7 @@
 # web app
 
+[Django REST framework and React](https://www.valentinog.com/blog/tutorial-api-django-rest-react/)
+
 ## purpose
 
 Web app that will scrap web every day and store data in database.
