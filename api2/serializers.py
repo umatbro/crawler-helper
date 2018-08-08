@@ -1,3 +1,5 @@
+from collector.models import City, BusStop
+
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
@@ -13,3 +15,14 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ('url', 'name')
 
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'name', 'last_update']
+
+
+class BusStopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BusStop
+        fields = '__all__'
