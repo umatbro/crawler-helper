@@ -1,6 +1,20 @@
-version: '3'
+version: '3.4'
 
 services:
+  database:
+    image: postgres:11-alpine
+    container_name: postgres_crawler
+    volumes:
+      - ./postgres_crawler:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+  migrate:
+    image: crawler_helper:latest
+    volumes:
+      - ./db:/app/db
+    command: ash -c "sleep 5 && python manage.py migrate"
+    depends_on:
+      - database
   app:
     working_dir: /app
     build:
@@ -8,7 +22,11 @@ services:
       dockerfile: Dockerfile
     image: crawler_helper:latest
     container_name: crawler
+    depends_on:
+      - database
+      - migrate
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - ./db:/app/db
+    command: ash -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"
