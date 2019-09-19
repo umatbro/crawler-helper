@@ -2,7 +2,11 @@
 import os
 import sys
 
+import dotenv
+
 if __name__ == "__main__":
+    dotenv.read_dotenv()
+
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "crawler.settings")
     try:
         from django.core.management import execute_from_command_line
@@ -11,7 +15,7 @@ if __name__ == "__main__":
         # issue is really that Django is missing to avoid masking other
         # exceptions on Python 2.
         try:
-            import django
+            import django  # noqa: F401
         except ImportError:
             raise ImportError(
                 "Couldn't import Django. Are you sure it's installed and "
