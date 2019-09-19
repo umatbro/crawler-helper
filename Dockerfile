@@ -14,9 +14,7 @@ RUN pip install poetry && \
 
 COPY ./pyproject.toml ./poetry.lock /
 
-RUN poetry install --no-dev
-
-RUN apk --purge del .build-deps
+RUN poetry install --no-dev && apk --purge del .build-deps && rm /pyproject.toml /poetry.lock
 
 COPY . ${APP_DIR}
 
