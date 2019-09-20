@@ -29,4 +29,5 @@ services:
       - '8000:8000'
     volumes:
       - ./db:/app/db
+      - .:/app
     command: ash -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"
