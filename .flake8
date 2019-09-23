@@ -4,6 +4,8 @@ exclude =
   .idea
   *env
   postgres_crawler
+  collector/migrations/*
+
 max-line-length = 120
 
 per-file-ignores =

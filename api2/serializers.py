@@ -31,11 +31,11 @@ class BusStopSerializer(serializers.ModelSerializer):
 
 
 class CityDetailsSerializer(serializers.ModelSerializer):
-    bus_stops = serializers.SerializerMethodField()
+    bus_stops = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
 
     class Meta:
         model = City
         fields = ('id', 'name', 'last_update', 'bus_stops')
 
-    def get_bus_stops(self, obj: City):
-        return BusStop.objects.filter(city=obj).values_list('name', flat=True)
+    # def get_bus_stops(self, obj: City):
+    #     return BusStop.objects.filter(city=obj).values_list('name', flat=True)

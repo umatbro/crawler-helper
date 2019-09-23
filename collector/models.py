@@ -13,7 +13,7 @@ class City(models.Model):
 
 
 class BusStop(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, related_name='bus_stops', on_delete=models.CASCADE)
     name = models.CharField(max_length=200, blank=True, default='')
 
     class Meta:
