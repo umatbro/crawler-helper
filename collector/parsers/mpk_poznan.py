@@ -1,15 +1,17 @@
 import re
-import requests
-from bs4 import BeautifulSoup
 from collections import defaultdict
-
-from typing import List, Tuple, DefaultDict
 from string import ascii_uppercase
+from typing import DefaultDict
+from typing import List
+from typing import Tuple
 
+import requests
 from django.utils import timezone
 
-from collector.models import City,BusStop, Timetable
-
+from bs4 import BeautifulSoup
+from collector.models import BusStop
+from collector.models import City
+from collector.models import TimetableLink
 
 MPK_HOMEPAGE = 'http://www.mpk.poznan.pl/'
 BUS_STOPS_ALPHABETICALLY_LINK = 'http://www.mpk.poznan.pl/component/transport/?letter={}&co=letter'
@@ -69,7 +71,7 @@ def update_city():
     for i, (stop_name, lines) in enumerate(bus_stops_alphabet.items()):
         bus_stop_model, just_created = BusStop.objects.get_or_create(city=city, name=stop_name)
         print('Gathering \'{}\' ({}%)'.format(bus_stop_model.name, (i+1)*100//len(bus_stops_alphabet)))
-        bulk = [Timetable(
+        bulk = [TimetableLink(
             bus_stop=bus_stop_model,
             link=link,
             line_number=line_number,
@@ -79,7 +81,7 @@ def update_city():
         if not just_created:
             bus_stop_model.timetable_set.all().delete()
 
-        Timetable.objects.bulk_create(bulk)
+        TimetableLink.objects.bulk_create(bulk)
 
     city.last_update = timezone.now()
     city.save()

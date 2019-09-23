@@ -1,9 +1,8 @@
 import requests
+
 from bs4 import BeautifulSoup
-
-from collector.models import City, BusStop, Timetable
+from collector.models import City
 from collector.parsers import city as city_upd
-
 
 MPK_HOMEPAGE = 'https://www.wroclaw.pl/'
 

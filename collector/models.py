@@ -23,8 +23,8 @@ class BusStop(models.Model):
         return 'BusStop({}, {})'.format(self.name, self.city.name)
 
 
-class Timetable(models.Model):
-    link = models.CharField(max_length=200, null=True)
+class TimetableLink(models.Model):
+    link = models.URLField(null=True)
     line_number = models.CharField(max_length=10, null=True)
     bus_stop = models.ForeignKey(BusStop, on_delete=models.CASCADE)
     last_update = models.DateTimeField(null=True)
