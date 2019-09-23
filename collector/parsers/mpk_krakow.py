@@ -1,8 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
-
 from django.utils import timezone
-from collector.models import City, BusStop, Timetable
+
+from bs4 import BeautifulSoup
+from collector.models import BusStop
+from collector.models import City
+from collector.models import TimetableLink
 from collector.parsers.city import update_city as upd_city
 
 MPK_HOMEPAGE = 'http://rozklady.mpk.krakow.pl/'
@@ -30,7 +32,8 @@ def get_all_stops(link: str) -> list:
     """
     From main page where all bus stops are listed get all links assigned to bus stop names
 
-    :param link: link to main page, where all stops are listed, http://rozklady.mpk.krakow.pl/?lang=PL&rozklad=20171023&akcja=przystanek
+    :param link: link to main page, where all stops are listed,
+      http://rozklady.mpk.krakow.pl/?lang=PL&rozklad=20171023&akcja=przystanek
     :return: list with 2-element tuples (bus stop name, link to bus stop)
     """
     soup = BeautifulSoup(mpk_content(link), 'html.parser')
@@ -72,7 +75,7 @@ def collect_all_info():
 def collect_bulks() -> list:
     """
     Save BusStops.
-    Create bulk with Timetable objects.
+    Create bulk with TimetableLink objects.
 
     :return: bulk with timetable objects
     """
@@ -94,7 +97,7 @@ def collect_bulks() -> list:
         bus_stop.save()
 
         for line_number, link in parse_bus_stop(mpk_content(stop_link, main_page.cookies)):
-            timetable_bulk.append(Timetable(
+            timetable_bulk.append(TimetableLink(
                 bus_stop=bus_stop,
                 line_number=line_number,
                 link=link,

@@ -1,5 +1,7 @@
 from django.http import JsonResponse
-from collector.models import City, BusStop, Timetable
+
+from collector.models import BusStop
+from collector.models import City
 
 
 def update_city_view(request, city_name):

@@ -8,7 +8,7 @@ class CityAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(models.Timetable)
+@admin.register(models.TimetableLink)
 class TimetableAdmin(admin.ModelAdmin):
     pass
 

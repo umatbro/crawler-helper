@@ -1,8 +1,13 @@
-from typing import Callable, List, Tuple
-from collector.models import City, Timetable, BusStop
 from collections import defaultdict
+from typing import Callable
+from typing import List
+from typing import Tuple
 
 from django.utils import timezone
+
+from collector.models import BusStop
+from collector.models import City
+from collector.models import TimetableLink
 
 
 class CityParser:
@@ -35,7 +40,7 @@ def update_city(city: City, stops_list: List[Tuple[str, str]], parse_bus_stop_fu
         # save bus stop to database
         bus_stop_model, just_created = BusStop.objects.get_or_create(city=city, name=bus_stop_name)
         print('Gathering \'{}\' ({}%)'.format(bus_stop_name, (i+1)*100//len(stops_list)))  # print progress
-        bulk = [Timetable(
+        bulk = [TimetableLink(
             bus_stop=bus_stop_model,
             link=timetable_link,
             line_number=line_number,
@@ -46,6 +51,6 @@ def update_city(city: City, stops_list: List[Tuple[str, str]], parse_bus_stop_fu
         if not just_created:
             bus_stop_model.timetable_set.all().delete()
 
-        Timetable.objects.bulk_create(bulk)
+        TimetableLink.objects.bulk_create(bulk)
     city.last_update = timezone.now()
     city.save()
