@@ -19,6 +19,7 @@ env = Env(
     SECRET_KEY=str,
     APP_ENV=(str, ''),
     ALLOWED_HOSTS=(list, []),
+    CELERY_BROKER_URL=str,
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -36,6 +37,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 
 # Application definition
 

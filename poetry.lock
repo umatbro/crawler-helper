@@ -1,4 +1,15 @@
 [[package]]
+category = "main"
+description = "Low-level AMQP client for Python (fork of amqplib)."
+name = "amqp"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "2.5.1"
+
+[package.dependencies]
+vine = ">=1.1.3,<5.0.0a1"
+
+[[package]]
 category = "dev"
 description = "A few extensions to pyyaml."
 name = "aspy.yaml"
@@ -19,6 +30,28 @@ version = "4.8.0"
 
 [package.dependencies]
 soupsieve = ">=1.2"
+
+[[package]]
+category = "main"
+description = "Python multiprocessing fork with improvements and bugfixes"
+name = "billiard"
+optional = false
+python-versions = "*"
+version = "3.6.1.0"
+
+[[package]]
+category = "main"
+description = "Distributed Task Queue."
+name = "celery"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "4.3.0"
+
+[package.dependencies]
+billiard = ">=3.6.0,<4.0"
+kombu = ">=4.4.0,<5.0"
+pytz = ">0.0-dev"
+vine = ">=1.3.0"
 
 [[package]]
 category = "main"
@@ -100,7 +133,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.8"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Read metadata from Python packages"
 name = "importlib-metadata"
 optional = false
@@ -111,7 +144,19 @@ version = "0.23"
 zipp = ">=0.5"
 
 [[package]]
-category = "dev"
+category = "main"
+description = "Messaging library for Python."
+name = "kombu"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "4.6.4"
+
+[package.dependencies]
+amqp = ">=2.5.1,<3.0"
+importlib-metadata = ">=0.18"
+
+[[package]]
+category = "main"
 description = "More routines for operating on iterables, beyond itertools"
 name = "more-itertools"
 optional = false
@@ -224,6 +269,14 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.25.3"
 
 [[package]]
+category = "main"
+description = "Promises, promises, promises."
+name = "vine"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.3.0"
+
+[[package]]
 category = "dev"
 description = "Virtual Python Environment builder"
 name = "virtualenv"
@@ -232,7 +285,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "16.7.5"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 name = "zipp"
 optional = false
@@ -243,12 +296,15 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "67a9fe21d772b4dd459a9658f1f4a24e4c17f327a9e0059f207b6b39a0a7e62a"
+content-hash = "ac937d049da11200fae5d839555276cbaaa9eafd66241f7fc70192c1bfe7a9c7"
 python-versions = "^3.7"
 
 [metadata.hashes]
+amqp = ["19a917e260178b8d410122712bac69cb3e6db010d68f6101e7307508aded5e68", "19d851b879a471fcfdcf01df9936cff924f422baa77653289f7095dedd5fb26a"]
 "aspy.yaml" = ["463372c043f70160a9ec950c3f1e4c3a82db5fca01d334b6bc89c7164d744bdc", "e7c742382eff2caed61f87a39d13f99109088e5e93f04d76eb8d4b28aa143f45"]
 beautifulsoup4 = ["05668158c7b85b791c5abde53e50265e16f98ad601c402ba44d70f96c4159612", "25288c9e176f354bf277c0a10aa96c782a6a18a17122dba2e8cec4a97e03343b", "f040590be10520f2ea4c2ae8c3dae441c7cfff5308ec9d58a0ec0c1b8f81d469"]
+billiard = ["01afcb4e7c4fd6480940cfbd4d9edc19d7a7509d6ada533984d0d0f49901ec82", "b8809c74f648dfe69b973c8e660bcec00603758c9db8ba89d7719f88d5f01f26"]
+celery = ["4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9", "528e56767ae7e43a16cfef24ee1062491f5754368d38fcfffa861cdb9ef219be"]
 certifi = ["e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50", "fd7c7c74727ddcf00e9acd26bba8da604ffec95bf1c2144e67aff7a8b50e6cef"]
 cfgv = ["edb387943b665bf9c434f717bf630fa78aecd53d5900d2e05da6ad6048553144", "fbd93c9ab0a523bf7daec408f3be2ed99a980e20b2d19b50fc184ca6b820d289"]
 chardet = ["84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae", "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"]
@@ -259,6 +315,7 @@ djangorestframework = ["5488aed8f8df5ec1d70f04b2114abc52ae6729748a176c453313834a
 identify = ["4f1fe9a59df4e80fcb0213086fcf502bc1765a01ea4fe8be48da3b65afd2a017", "d8919589bd2a5f99c66302fec0ef9027b12ae150b0b0213999ad3f695fc7296e"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 importlib-metadata = ["aa18d7378b00b40847790e7c27e11673d7fed219354109d0e7b9e5b25dc3ad26", "d5f18a79777f3aa179c145737780282e27b508fc8fd688cb17c7a813e8bd39af"]
+kombu = ["55274dc75eb3c3994538b0973a0fadddb236b698a4bc135b8aa4981e0a710b8f", "e5f0312dfb9011bebbf528ccaf118a6c2b5c3b8244451f08381fb23e7715809b"]
 more-itertools = ["409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832", "92b8c4b06dac4f0611c0729b2f2ede52b2e1bac1ab48f089c7ddc12e26bb60c4"]
 nodeenv = ["ad8259494cf1c9034539f6cced78a1da4840a4b157e23640bc4a0c0546b0cb7a"]
 pre-commit = ["1d3c0587bda7c4e537a46c27f2c84aa006acc18facf9970bf947df596ce91f3f", "fa78ff96e8e9ac94c748388597693f18b041a181c94a4f039ad20f45287ba44a"]
@@ -271,5 +328,6 @@ soupsieve = ["8662843366b8d8779dec4e2f921bebec9afd856a5ff2e82cd419acc5054a1a92",
 sqlparse = ["40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177", "7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
 urllib3 = ["b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1", "dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"]
+vine = ["133ee6d7a9016f177ddeaf191c1f58421a1dcc6ee9a42c58b34bed40e1d2cd87", "ea4947cc56d1fd6f2095c8d543ee25dad966f78692528e68b4fada11ba3f98af"]
 virtualenv = ["680af46846662bb38c5504b78bad9ed9e4f3ba2d54f54ba42494fdf94337fe30", "f78d81b62d3147396ac33fc9d77579ddc42cc2a98dd9ea38886f616b33bc7fb2"]
 zipp = ["3718b1cbcd963c7d4c5511a8240812904164b7f381b647143a89d3b98f9bcd8e", "f06903e9f1f43b12d371004b4ac7b06ab39a44adc747266928ae6debfa7b3335"]
