@@ -4,3 +4,4 @@ requirements.txt
 *env
 .idea
 !.env
+postgres_crawler

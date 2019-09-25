@@ -15,4 +15,4 @@ class TimetableAdmin(admin.ModelAdmin):
 
 @admin.register(models.BusStop)
 class BusStopAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('name', 'city__name',)
