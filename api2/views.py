@@ -14,6 +14,7 @@ from api2.serializers import CityListSerializer
 from api2.serializers import CitySerializer
 from api2.serializers import GroupSerializer
 from api2.serializers import UserSerializer
+from api2.tasks import send_email_with_dump_task
 from collector.models import City
 
 
@@ -44,9 +45,11 @@ class GetDumpView(APIView):
         if serializer.is_valid():
             cities = serializer.validated_data.get('cities')
             email = serializer.validated_data.get('email')
-            city_models, errors = services.get_cities(cities)
-            dump = services.get_dump(city_models)
-            services.send_email_with_dump(email, dump)
+            _, errors = services.get_cities(cities)
+
+            send_email_with_dump_task.delay(email, cities)
+            # send_email_with_dump_task(email, cities)
+
             return Response({
                 'message': 'Email with dump will be sent shortly.',
                 'errors': errors,

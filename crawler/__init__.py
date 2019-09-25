@@ -1,0 +1,3 @@
+from crawler.celery_cfg import app as celery_app
+
+__all__ = ('celery_app', )

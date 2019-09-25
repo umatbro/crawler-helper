@@ -14,6 +14,12 @@ import os
 
 from environ import Env
 
+import dotenv
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+dotenv.read_dotenv(os.path.join(BASE_DIR, '.env'))
+
 env = Env(
     DEBUG=(bool, False),
     SECRET_KEY=str,
@@ -21,11 +27,8 @@ env = Env(
     ALLOWED_HOSTS=(list, []),
     CELERY_BROKER_URL=str,
     SENDGRID_API_KEY=str,
+    SEND_DUMP_DELAY_SECONDS=(int, 0),
 )
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -41,6 +44,8 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 
 SENDGRID_API_KEY = env('SENDGRID_API_KEY')
+
+SEND_DUMP_DELAY_SECONDS = env('SEND_DUMP_DELAY_SECONDS')
 
 # Application definition
 
@@ -58,6 +63,7 @@ INSTALLED_APPS = [
 
     # project apps
     'collector',
+    'api2',
 ]
 
 MIDDLEWARE = [

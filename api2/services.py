@@ -43,7 +43,7 @@ def get_cities(cities: List[str]) -> Tuple[List[City], Dict[str, str]]:
     return city_models, errors
 
 
-def send_email_with_dump(email: str, dump: dict):
+def send_email_with_dump(email: str, dump: List[dict]):
     message = Mail(
         from_email='admin@umatbro.gq',
         to_emails=email,
