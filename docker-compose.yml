@@ -14,25 +14,31 @@ services:
     ports:
       - '5432:5432'
   migrate:
-    image: crawler_helper:latest
-    volumes:
-      - ./db:/app/db
-    command: ash -c "sleep 5 && python manage.py migrate"
-    depends_on:
-      - database
-  app:
-    working_dir: /app
     build:
       context: .
       dockerfile: Dockerfile
     image: crawler_helper:latest
-    container_name: crawler
-    depends_on:
-      - message_broker
-      - database
-      - migrate
-    ports:
-      - '8000:8000'
+    restart: on-failure
+    environment:
+      - DATABASE_URL=postgresql://postgres@postgres_crawler:5432/postgres
     volumes:
-      - .:/app
-    command: ash -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"
+      - ./:/app/
+    command: ash -c "python manage.py migrate"
+    depends_on:
+      - database
+#  app:
+#    working_dir: /app
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    image: crawler_helper:latest
+#    container_name: crawler
+#    depends_on:
+#      - message_broker
+#      - database
+#      - migrate
+#    ports:
+#      - '8000:8000'
+#    volumes:
+#      - .:/app
+#    command: ash -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"

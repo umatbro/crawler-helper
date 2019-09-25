@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from collector.models import BusStop
 from collector.models import City
+from collector.models import TimetableLink
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -39,3 +40,30 @@ class CityDetailsSerializer(serializers.ModelSerializer):
 
     # def get_bus_stops(self, obj: City):
     #     return BusStop.objects.filter(city=obj).values_list('name', flat=True)
+
+
+class TimetableLinkDumpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimetableLink
+        fields = ('line_number', 'link', 'last_update')
+
+
+class BusStopDumpSerializer(serializers.ModelSerializer):
+    timetables_links = TimetableLinkDumpSerializer(many=True, source='timetablelink_set')
+
+    class Meta:
+        model = BusStop
+        fields = ('name', 'timetables_links')
+
+
+class CityDumpSerializer(serializers.ModelSerializer):
+    bus_stops = BusStopDumpSerializer(many=True)
+
+    class Meta:
+        model = City
+        fields = ('name', 'bus_stops')
+
+
+class CityListSerializer(serializers.Serializer):
+    cities = serializers.ListField(child=serializers.CharField())
+    email = serializers.EmailField(required=True, allow_null=False, allow_blank=False)

@@ -20,6 +20,7 @@ env = Env(
     APP_ENV=(str, ''),
     ALLOWED_HOSTS=(list, []),
     CELERY_BROKER_URL=str,
+    SENDGRID_API_KEY=str,
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -39,6 +40,8 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     # external apps
     'rest_framework',

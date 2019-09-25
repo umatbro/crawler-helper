@@ -1,6 +1,7 @@
 import os
 import traceback
 from copy import deepcopy
+from unittest import skip
 
 from django.test import TestCase
 
@@ -13,6 +14,7 @@ from collector.parsers import ztm_warszawa
 from crawler.settings import BASE_DIR
 
 
+@skip
 class ParserTests(TestCase):
     def test_krakow_single_stop(self):
         """
@@ -41,6 +43,7 @@ class ParserTests(TestCase):
         ])
 
 
+@skip
 class WroclawParserTest(TestCase):
     def test_parse_bus_stop_list(self):
         stops_list = mpk_wroclaw.parse_bus_stop_list('https://www.wroclaw.pl/wszystkie-przystanki')
@@ -52,6 +55,7 @@ class WroclawParserTest(TestCase):
         self.assertTrue(('Zębice - Trzech Lip/Prusa', 'https://www.wroclaw.pl/linie-na-przystanku-zebice-trzech-lip-prusa-wroclaw') in stops_list)
 
 
+@skip
 class UpdateTester(TestCase):
     def test_krakow_update_twice(self):
         try:

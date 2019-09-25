@@ -13,4 +13,5 @@ urlpatterns = [
     path('auth', include('rest_framework.urls', namespace='rest_framework')),
     path('cities/', views.CitiesView.as_view(), name='cities'),
     path('cities/<int:id>', views.CityView.as_view(), name='city-details'),
+    path('get-dump/', views.GetDumpView.as_view(), name='get-dump'),
 ]
