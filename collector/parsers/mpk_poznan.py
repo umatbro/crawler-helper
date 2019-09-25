@@ -79,7 +79,7 @@ def update_city():
         ) for line_number, link in lines]
 
         if not just_created:
-            bus_stop_model.timetable_set.all().delete()
+            bus_stop_model.timetablelink_set.all().delete()
 
         TimetableLink.objects.bulk_create(bulk)
 

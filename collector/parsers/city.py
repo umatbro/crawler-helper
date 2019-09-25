@@ -49,7 +49,7 @@ def update_city(city: City, stops_list: List[Tuple[str, str]], parse_bus_stop_fu
 
         # if bus stop model existed before - clear all timetables assigned to it
         if not just_created:
-            bus_stop_model.timetable_set.all().delete()
+            bus_stop_model.timetablelink_set.all().delete()
 
         TimetableLink.objects.bulk_create(bulk)
     city.last_update = timezone.now()

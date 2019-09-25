@@ -40,7 +40,7 @@ def city_timetables(request):
             city_stops = []
             for stop in city.busstop_set.all():
                 city_stops.append(
-                    {stop.name: [{line.line_number: line.link} for line in stop.timetable_set.all()]}
+                    {stop.name: [{line.line_number: line.link} for line in stop.timetablelink_set.all()]}
                     if not only_ids else stop.id
                 )
             cities_j.append({
@@ -56,7 +56,7 @@ def all_info(request):
     response = {}
     for city in City.objects.all():
         response[city.name] = {
-            bus_stop.name: {timetable.line_number: timetable.link for timetable in bus_stop.timetable_set.all()}
+            bus_stop.name: {timetable.line_number: timetable.link for timetable in bus_stop.timetablelink_set.all()}
             for bus_stop in BusStop.objects.filter(city=city)
         }
 
@@ -73,5 +73,5 @@ def bus_stop(request, id):
     bus_stop = BusStop.objects.get(id=id)
     return JsonResponse({
         'name': bus_stop.name,
-        'timetables': [{line.line_number: line.link} for line in bus_stop.timetable_set.all()]
+        'timetables': [{line.line_number: line.link} for line in bus_stop.timetablelink_set.all()]
     })
