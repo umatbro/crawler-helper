@@ -17,15 +17,25 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: crawler_helper:latest
+    image: &img crawler_helper:latest
     restart: on-failure
-    environment:
+    environment: &local_env
       - DATABASE_URL=postgresql://postgres@postgres_crawler:5432/postgres
+      - CELERY_BROKER_URL=amqp://message_broker
     volumes:
       - ./:/app/
     command: ash -c "python manage.py migrate"
     depends_on:
       - database
+  worker:
+    build: .
+    image: *img
+    command: [celery, -A, crawler, worker, -l, info]
+    depends_on:
+      - message_broker
+    environment: *local_env
+    restart: on-failure
+
 #  app:
 #    working_dir: /app
 #    build:
