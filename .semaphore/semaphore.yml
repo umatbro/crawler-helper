@@ -19,7 +19,7 @@ blocks:
             - echo "${DOCKER_PASSWORD}" |  docker login -u "${DOCKER_USERNAME}" --password-stdin
             - checkout
             - docker-compose -v
-            - docker build -t crawler_helper:latest Dockerfile
+            - docker build -t crawler_helper:latest .
             - docker tag crawler_helper:latest "$DOCKER_USERNAME"/crawler_helper:latest
             - docker tag crawler_helper:latest "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
             - docker push "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
