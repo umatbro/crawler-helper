@@ -44,5 +44,5 @@ blocks:
             commands:
               - docker exec -it crawler python manage.py test api2
           - name: Run unit test collector
-              commands:
-                - docker exec -it crawler python manage.py test collector
+            commands:
+              - docker exec -it crawler python manage.py test collector
