@@ -28,7 +28,7 @@ blocks:
   - name: Run & test
     task:
       secrets:
-        - dockerhub-credentials
+        - name: dockerhub-credentials
       prologue:
         commands:
           # authenticate dockerhub
