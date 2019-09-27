@@ -18,7 +18,7 @@ services:
       cache_from:
         - umat/crawler_helper
     image: &img crawler_helper
-    restart: on-failure
+    restart: on-failure:50
     env_file: &env_file
       - /secrets.env
     command: ash -c "python manage.py migrate"

@@ -13,6 +13,10 @@ blocks:
       secrets:
         - name: dockerhub-credentials
       jobs:
+        - name: find secrets
+          commands:
+            - ls /
+            - find / -name secrets.env
         - name: Docker build
           commands:
             - echo "${DOCKER_PASSWORD}" |  docker login -u "${DOCKER_USERNAME}" --password-stdin
