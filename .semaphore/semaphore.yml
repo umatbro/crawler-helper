@@ -36,13 +36,13 @@ blocks:
           - checkout
           - docker pull "$DOCKER_USERNAME"/crawler_helper
           - docker-compose up -d
-        jobs:
-          - name: Check running images
-            commands:
-              - docker ps
-          - name: Run unit test api2
-            commands:
-              - docker exec -it crawler python manage.py test api2
-          - name: Run unit test collector
-            commands:
-              - docker exec -it crawler python manage.py test collector
+      jobs:
+        - name: Check running images
+          commands:
+            - docker ps
+        - name: Run unit test api2
+          commands:
+            - docker exec -it crawler python manage.py test api2
+        - name: Run unit test collector
+          commands:
+            - docker exec -it crawler python manage.py test collector
