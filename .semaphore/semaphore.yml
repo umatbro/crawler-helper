@@ -15,7 +15,7 @@ blocks:
       jobs:
         - name: Docker build
           commands:
-            - echo "${DOCKER_PASSWORD} |  docker login -u "${DOCKER_USERNAME}" --password-stdin
+            - echo "${DOCKER_PASSWORD}" |  docker login -u "${DOCKER_USERNAME}" --password-stdin
             - checkout
             - docker-compose -v
             - docker-compose -f docker-compose.semaphore.yml build
