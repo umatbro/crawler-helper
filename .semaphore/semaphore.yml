@@ -12,11 +12,8 @@ blocks:
       # mount secrets with docker credentials
       secrets:
         - name: dockerhub-credentials
+        - name: crawler-helper
       jobs:
-        - name: find secrets
-          commands:
-            - ls /
-            - find / -name secrets.env
         - name: Docker build
           commands:
             - echo "${DOCKER_PASSWORD}" |  docker login -u "${DOCKER_USERNAME}" --password-stdin
@@ -33,6 +30,7 @@ blocks:
     task:
       secrets:
         - name: dockerhub-credentials
+        - name: crawler-helper
       prologue:
         commands:
           # authenticate dockerhub
