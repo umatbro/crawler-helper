@@ -20,7 +20,7 @@ services:
     image: &img crawler_helper
     restart: on-failure:50
     env_file: &env_file
-      - /secrets.env
+      - ~/secrets.env
     command: ash -c "python manage.py migrate"
     depends_on:
       - database
