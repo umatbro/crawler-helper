@@ -35,7 +35,7 @@ blocks:
           - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
           - checkout
           - docker pull "$DOCKER_USERNAME"/crawler_helper
-          - docker-compose up -d
+          - docker-compose -f docker-compose.semaphore.yml up -d
       jobs:
         - name: Check running images
           commands:
