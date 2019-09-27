@@ -19,9 +19,8 @@ services:
         - umat/crawler_helper
     image: &img crawler_helper
     restart: on-failure
-    environment: &local_env
-      - DATABASE_URL=postgresql://postgres@postgres_crawler:5432/postgres
-      - CELERY_BROKER_URL=amqp://message_broker
+    env_file: &env_file
+      - /secrets.env
     command: ash -c "python manage.py migrate"
     depends_on:
       - database
@@ -32,7 +31,7 @@ services:
     command: [celery, -A, crawler, worker, -l, info]
     depends_on:
       - message_broker
-    environment: *local_env
+    env_file: *env_file
     restart: on-failure
 
   app:
@@ -44,7 +43,7 @@ services:
       - message_broker
       - database
       - migrate
-    environment: *local_env
+    env_file: *env_file
     expose:
       - 8000
     volumes:
