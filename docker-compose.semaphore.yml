@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
         - umat/crawler_helper
-    image: &img umat/crawler_helper
+    image: &img crawler_helper
     restart: on-failure
     environment: &local_env
       - DATABASE_URL=postgresql://postgres@postgres_crawler:5432/postgres
