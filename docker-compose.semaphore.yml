@@ -12,12 +12,7 @@ services:
     expose:
       - 5432
   migrate:
-    build: &build_dockerfile
-      context: .
-      dockerfile: Dockerfile
-      cache_from:
-        - umat/crawler_helper
-    image: &img crawler_helper
+    image: &img "umat/crawler_helper:${SEMAPHORE_WORKFLOW_ID}"
     restart: on-failure:50
     env_file: &env_file
       - ~/secrets.env
@@ -26,7 +21,6 @@ services:
       - database
 
   worker:
-    build: *build_dockerfile
     image: *img
     command: [celery, -A, crawler, worker, -l, info]
     depends_on:
@@ -36,7 +30,6 @@ services:
 
   app:
     working_dir: /app
-    build: *build_dockerfile
     image: *img
     container_name: crawler
     depends_on:

@@ -19,10 +19,9 @@ blocks:
             - echo "${DOCKER_PASSWORD}" |  docker login -u "${DOCKER_USERNAME}" --password-stdin
             - checkout
             - docker-compose -v
-            - docker-compose -f docker-compose.semaphore.yml build
+            - docker build -t crawler_helper:latest Dockerfile
             - docker tag crawler_helper:latest "$DOCKER_USERNAME"/crawler_helper:latest
             - docker tag crawler_helper:latest "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
-            - docker push "$DOCKER_USERNAME"/crawler_helper:latest
             - docker push "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
             - docker pull "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
             - docker images
@@ -36,7 +35,6 @@ blocks:
           # authenticate dockerhub
           - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
           - checkout
-          - docker pull "$DOCKER_USERNAME"/crawler_helper
           - docker-compose -f docker-compose.semaphore.yml up -d
       jobs:
         - name: Check running images
