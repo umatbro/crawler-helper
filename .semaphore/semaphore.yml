@@ -35,14 +35,10 @@ blocks:
           # authenticate dockerhub
           - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
           - checkout
-          - docker-compose -f docker-compose.semaphore.yml up -d
       jobs:
-        - name: Check running images
-          commands:
-            - docker ps
         - name: Run unit test api2
           commands:
-            - docker exec -it crawler python manage.py test api2
+            - docker-compose -f docker-compose.semaphore.yml run app python manage.py test api2
         - name: Run unit test collector
           commands:
-            - docker exec -it crawler python manage.py test collector
+            - docker-compose -f docker-compose.semaphore.yml run app python manage.py test collector
