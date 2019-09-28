@@ -1,0 +1,44 @@
+version: v1.0
+name: Main
+
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Build
+    task:
+      # mount secrets with docker credentials
+      secrets:
+        - name: dockerhub-credentials
+        - name: crawler-helper
+      jobs:
+        - name: Docker build
+          commands:
+            - echo "${DOCKER_PASSWORD}" |  docker login -u "${DOCKER_USERNAME}" --password-stdin
+            - checkout
+            - docker-compose -v
+            - docker build -t crawler_helper:latest .
+            - docker tag crawler_helper:latest "$DOCKER_USERNAME"/crawler_helper:latest
+            - docker tag crawler_helper:latest "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
+            - docker push "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
+            - docker pull "$DOCKER_USERNAME"/crawler_helper:$SEMAPHORE_WORKFLOW_ID
+            - docker images
+  - name: Run & test
+    task:
+      secrets:
+        - name: dockerhub-credentials
+        - name: crawler-helper
+      prologue:
+        commands:
+          # authenticate dockerhub
+          - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+          - checkout
+      jobs:
+        - name: Run unit test api2
+          commands:
+            - docker-compose -f docker-compose.semaphore.yml run app python manage.py test api2
+        - name: Run unit test collector
+          commands:
+            - docker-compose -f docker-compose.semaphore.yml run app python manage.py test collector
