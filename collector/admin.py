@@ -10,7 +10,8 @@ class CityAdmin(admin.ModelAdmin):
 
 @admin.register(models.TimetableLink)
 class TimetableAdmin(admin.ModelAdmin):
-    pass
+    autocomplete_fields = ('bus_stop', )
+    list_display = ('bus_stop', 'line_number', 'last_update')
 
 
 @admin.register(models.BusStop)
