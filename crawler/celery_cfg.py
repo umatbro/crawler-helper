@@ -11,7 +11,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 
-@app.task(bind=True)
+@app.task
 def update_db():
     call_command('updatedb')
 
