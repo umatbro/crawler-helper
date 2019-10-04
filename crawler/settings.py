@@ -28,7 +28,7 @@ env = Env(
     CELERY_BROKER_URL=str,
     SENDGRID_API_KEY=str,
     SEND_DUMP_DELAY_SECONDS=(int, 0),
-    CELERY_TIMEZONE=(str, 'Europe/Warsaw')
+    TIMEZONE=(str, 'Europe/Warsaw')
 )
 
 # Quick-start development settings - unsuitable for production
@@ -43,7 +43,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')
-CELERY_TIMEZONE = env('CELERY_TIMEZONE')
+CELERY_TIMEZONE = env('TIMEZONE')
 
 SENDGRID_API_KEY = env('SENDGRID_API_KEY')
 
@@ -131,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env('TIMEZONE')
 
 USE_I18N = True
 
