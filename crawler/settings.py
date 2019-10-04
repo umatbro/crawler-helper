@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 
     # external apps
     'rest_framework',
+    'django_celery_beat',
 
     # project apps
     'collector',
