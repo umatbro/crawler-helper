@@ -35,6 +35,14 @@ services:
       - message_broker
     environment: *local_env
     restart: on-failure
+  beat:
+    build: .
+    image: *img
+    command: [celery, -A, crawler, beat, -l, INFO]
+    depends_on:
+      - message_broker
+    environment: *local_env
+    restart: on-failure
 
 #  app:
 #    working_dir: /app
