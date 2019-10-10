@@ -17,6 +17,7 @@ psycopg2-binary = "^2.8"
 celery = "^4.3"
 sendgrid = "^6.1"
 django-celery-beat = "^1.5"
+flower = "^0.9.3"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^1.18"

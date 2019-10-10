@@ -38,10 +38,20 @@ services:
   beat:
     build: .
     image: *img
-    command: [celery, -A, crawler, beat, -l, INFO, --scheduler, django_celery_beat.schedulers:DatabaseScheduler]
+    command: [celery, -A, crawler, beat, -l, INFO, --scheduler, django_celery_beat.schedulers:DatabaseScheduler, --pidfile=/opt/celeryd.pid]
     depends_on:
       - message_broker
     environment: *local_env
+    restart: on-failure
+  flower:
+    build: .
+    image: *img
+    command: [flower, -A, crawler, --port=5555]
+    depends_on:
+      - message_broker
+    environment: *local_env
+    ports:
+      - '5555:5555'
     restart: on-failure
 
 #  app:
